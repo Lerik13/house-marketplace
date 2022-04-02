@@ -289,11 +289,12 @@ button {
 }
 
 .registerLink {
-  margin-top: 4rem;
+  margin-top: 1.5rem;
   color: #00cc66;
   font-weight: 600;
   text-align: center;
   margin-bottom: 3rem;
+  padding-bottom: 6rem;
 }
 
 @media (min-width: 1217px) {
