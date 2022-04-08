@@ -1,25 +1,47 @@
 import { useEffect, useState } from "react";
-import { getAuth, updateProfile } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { db } from '../firebase.config'
-import { doc, updateDoc } from "firebase/firestore";
+import { getAuth, updateProfile } from "firebase/auth";
+import { collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { toast } from "react-toastify";
 import arrowRight from '../assets/svg/keyboardArrowRightIcon.svg'
 import homeIcon from '../assets/svg/homeIcon.svg'
+import ListingItem from '../components/ListingItem'
 
 function Profile() {
 	const auth = getAuth()
 
+	const [loading, setLoading] = useState(true);
+	const [listings, setListings] = useState(null);
 	const [changeDetails, setChangeDetails] = useState(false);
-
 	const [formData, setFormData] = useState({
 		name: auth.currentUser.displayName,
 		email: auth.currentUser.email,
 	});
-
 	const { name, email } = formData
 
 	const navigate = useNavigate()
+	
+	useEffect(() => {
+		const fetchUserListings = async () => {
+			const listingsRef = collection(db, 'listings')
+			const q = query(listingsRef, where('userRef', '==', auth.currentUser.uid), orderBy('timestamp', 'desc'))
+			const querySnap = await getDocs(q)
+
+			let listings = []
+
+			querySnap.forEach((doc) => {
+				return listings.push({
+					id: doc.id,
+					data: doc.data()
+				})
+			})
+			setListings(listings)
+			setLoading(false)
+		}
+
+		fetchUserListings()
+	}, [auth.currentUser.uid]);
 
 	const onLogout = () => {
 		auth.signOut()
@@ -32,6 +54,15 @@ function Profile() {
 			[e.target.id]: e.target.value,
 		}))
 	}
+
+	const onDelete = async (listingId) => {
+		if (window.confirm('Are you sure you want to delete?')) {
+			await deleteDoc( doc(db, 'listings', listingId) )
+			const updatedListings = listings.filter((listing) => listing.id !== listingId)
+			setListings(updatedListings)
+			toast.success('Successfully deleted listing')
+		}
+	} 
 
 	const onSubmit = async () => {
 		try {
@@ -96,6 +127,22 @@ function Profile() {
 				<p>Sell or Rent your home</p>
 				<img src={arrowRight} alt="arrow right" />
 			</Link>
+
+			{!loading && listings?.length > 0 && (
+				<>
+					<p className="listingText">Your Listings</p>
+					<ul className="listingsList">
+						{listings.map((listing) => (
+							<ListingItem 
+								key={listing.id}
+								listing={listing.data}
+								id={listing.id}
+								onDelete={() => onDelete(listing.id)}
+							/>
+						))}
+					</ul>
+				</>
+			)}
 		</main>
 	</div>
 }

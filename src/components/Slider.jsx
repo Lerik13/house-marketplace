@@ -29,7 +29,6 @@ function Slider() {
 				})
 			})
 
-			console.log(listings);
 			setListings(listings)
 			setLoading(false)
 		}
