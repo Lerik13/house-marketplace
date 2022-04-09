@@ -9,6 +9,7 @@ import { db } from '../firebase.config'
 import { v4 as uuidv4} from 'uuid';
 
 function EditListing() {
+	//eslint-disable-next-line
 	const [geolocationEnabled, setGeolocationEnabled] = useState(true);
 	const [loading, setLoading] = useState(false);
 	const [listing, setListing] = useState(null);
@@ -76,7 +77,7 @@ function EditListing() {
 		fetchListing()
 	}, [params.listingId, navigate]);
 
-	// Sets userRef to logged inuser
+	// Sets userRef to logged in user
 	useEffect(() => {
 		if (isMounted) {
 			onAuthStateChanged(auth, (user) => {
@@ -91,7 +92,9 @@ function EditListing() {
 		return () => {
 			isMounted.current = false
 		}
+		//eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMounted]);
+
 
 	const onSubmit = async (e) => {
 		e.preventDefault()
@@ -155,6 +158,8 @@ function EditListing() {
 							break;
 						case 'running':
 							console.log('Upload is running');
+							break;
+						default:
 							break;
 					}
 				}, 
