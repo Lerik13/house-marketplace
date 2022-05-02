@@ -7,10 +7,10 @@ import { toast } from "react-toastify";
 import arrowRight from '../assets/svg/keyboardArrowRightIcon.svg'
 import homeIcon from '../assets/svg/homeIcon.svg'
 import ListingItem from '../components/ListingItem'
+import { getStorage, ref, deleteObject } from 'firebase/storage'
 
 function Profile() {
 	const auth = getAuth()
-
 	const [loading, setLoading] = useState(true);
 	const [listings, setListings] = useState(null);
 	const [changeDetails, setChangeDetails] = useState(false);
@@ -55,11 +55,28 @@ function Profile() {
 		}))
 	}
 
-	const onDelete = async (listingId) => {
-		if (window.confirm('Are you sure you want to delete?')) {
+	const removeFilesFromStorage =  (imgUrls) => {
+		const storage = getStorage()
+
+		imgUrls.map((imgUrl) => {
+			const imgRef = ref(storage, imgUrl);
+			// Delete the file
+			deleteObject(imgRef).then(() => {
+				console.log('Image file is deleted successfully');
+			}).catch((e) => {
+				toast.error('Error during deleting files in Storage')
+				console.log(e);
+			});
+		})
+	} 
+	
+	const onDelete = async (listingId, imgUrls) => {
+
+		if (window.confirm('Are you sure you want to delete listing?')) {
 			await deleteDoc( doc(db, 'listings', listingId) )
 			const updatedListings = listings.filter((listing) => listing.id !== listingId)
 			setListings(updatedListings)
+			removeFilesFromStorage(imgUrls)
 			toast.success('Successfully deleted listing')
 		}
 	}
@@ -139,7 +156,7 @@ function Profile() {
 								key={listing.id}
 								listing={listing.data}
 								id={listing.id}
-								onDelete={() => onDelete(listing.id)}
+								onDelete={() => onDelete(listing.id, listing.data.imgUrls)}
 								onEdit={() => onEdit(listing.id)}
 							/>
 						))}

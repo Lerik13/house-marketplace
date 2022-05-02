@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
 import { doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import { v4 as uuidv4} from 'uuid';
@@ -26,7 +26,8 @@ function EditListing() {
 		discountedPrice: 0,
 		images: {},
 		latitude: 0,
-		longitude: 0
+		longitude: 0,
+		imgUrls: []
 	});
 	const {
 		type,
@@ -42,6 +43,7 @@ function EditListing() {
 		images,
 		latitude,
 		longitude,
+		imgUrls,
 	  } = formData
 
 	const auth = getAuth()
@@ -95,7 +97,6 @@ function EditListing() {
 		//eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMounted]);
 
-
 	const onSubmit = async (e) => {
 		e.preventDefault()
 		
@@ -138,6 +139,23 @@ function EditListing() {
 			geolocation.lat = latitude
 			geolocation.lng = longitude
 		}
+		
+		// Delete image-files from Storage
+		const removeFilesFromStorage =  (imgUrls) => {
+			const storage = getStorage()
+	
+			imgUrls.map((imgUrl) => {
+				const imgRef = ref(storage, imgUrl);
+				// Delete the file
+				deleteObject(imgRef).then(() => {
+					console.log('Image file is deleted successfully');
+				}).catch((e) => {
+					toast.error('Error during deleting files in Storage')
+					console.log(e);
+				});
+			})
+		}		
+		removeFilesFromStorage(formData.imgUrls)
 
 		// Store images in firebase
 		const storeImage = async(image) => {
@@ -174,7 +192,7 @@ function EditListing() {
 			})
 		}
 
-		const imgUrls = await Promise.all(
+		const newImgUrls = await Promise.all(
 			[...images].map((image) => {
 				return storeImage(image)
 			} )
@@ -186,7 +204,7 @@ function EditListing() {
 
 		const formDataCopy = {
 			...formData,
-			imgUrls,
+			imgUrls: newImgUrls,
 			geolocation,
 			timestamp: serverTimestamp()
 		}

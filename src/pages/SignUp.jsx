@@ -56,7 +56,7 @@ function SignUp() {
 		<>
 			<div className="pageContainer">
 				<header>
-					<p className="pageHeader">Welcome Back!</p>
+					<p className="pageHeader">Register User</p>
 				</header>
 
 				<main>

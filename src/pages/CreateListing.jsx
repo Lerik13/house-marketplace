@@ -10,7 +10,8 @@ import { v4 as uuidv4} from 'uuid';
 
 function CreateListing() {
 	//eslint-disable-next-line
-	const [geolocationEnabled, setGeolocationEnabled] = useState(true);
+	const [geolocationEnabled, setGeolocationEnabled] = useState(true); 
+	// use Geocode API key from .env or we can set geolocationEnabled to "false" and it will add a lat/lng field to the form
 	const [loading, setLoading] = useState(false);
 	const [formData, setFormData] = useState({
 		type: 'rent',
@@ -45,6 +46,12 @@ function CreateListing() {
 
 	const auth = getAuth()
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		setFormData({...formData, userRef: auth.currentUser.uid })
+	}, []);
+
+/*
 	const isMounted = useRef(true)
 
 	useEffect(() => {
@@ -63,7 +70,7 @@ function CreateListing() {
 		}
 		//eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMounted]);
-
+*/
 	const onSubmit = async (e) => {
 		e.preventDefault()
 		
