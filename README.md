@@ -41,7 +41,7 @@ Database + Authontification + File storage: Firebase
   <li>Add/Edit/Remove Note for user's ticket if the ticket is not-clossed and this note is not from Admin</li>
 </ol>
 
-#### Developing details (libs):
+### Developing details (libs):
 <ul>
   <li>react
   <li>react-router-dom -- page navigation</li>
