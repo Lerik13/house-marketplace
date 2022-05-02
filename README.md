@@ -1,70 +1,70 @@
-# Getting Started with Create React App
+# Listing app - House Marketplace
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React app for Creating/Searching Listings for rent or sale houses/appartments
 
-## Available Scripts
+Design: mobile-first<br>
+Database + Authontification + File storage: Firebase
 
-In the project directory, you can run:
+### Client Functionality:
+<ol>
+  <li>Register User (/sign-up)</li>
+  <li>Login/Logout User (/sign-in)<br>
+      test user: tets@test.com, password: test123        
+  </li>
+  <li>SignIn & SignUp with Google account </li>
+  <li>Forgot Password
+  </li>
+  <li>For unauthorized user:<br> 
+    - observe listings in <br>
+      <ul>
+        <li>main page 'Explore',</li>
+        <li>places for Rent (/category/rent),</li>
+        <li>places for Sale (/category/sale)</li>
+        <li>Offers page</li>
+      </ul>
+    - see all details about certain listing and be able to contact with landlord
+  </li>
+  <li>For authorized user (Profile page):<br>
+      <ul>
+        <li>Change Profile details: name and email</li>
+        <li>Add listing for rent or sell in Profile page</li>
+        <li>See all user's listings</li>
+        <li>Edit/Delete own listings</li>
+      </ul>    
+  </li>
+  <li>See all user's tickets</li>
+  <li>Edit description of user's ticket if the ticket is not-clossed</li>
+  <li>Change status for ticket <br>
+    ticket created with status='new',<br>
+    if status is closed, user cannot edit the ticket, <br>
+    user has possibility to reopen the ticket, status will be open</li>
+  <li>Add/Edit/Remove Note for user's ticket if the ticket is not-clossed and this note is not from Admin</li>
+</ol>
 
-### `npm start`
+#### Developing details (libs):
+<ul>
+  <li>react
+  <li>react-router-dom -- page navigation</li>
+  <li>firebase<br>
+      - Add authentication for email/password and Google<br>
+      - Enable Firestore Database
+      - Add rules for Firestore Database
+      - Create 3 composite indexes for advanced querying:
+        1) collection=Listing (fields: type Asc, timestamp Desc)
+        2) collection=Listing (fields: userRef Asc, timestamp Desc)
+        3) collection=Listing (fields: offer Asc, timestamp Desc)    
+  </li>
+  <li>react-toastify -- nice alerts</li>
+  <li>axios -- for async http-queries</li>
+  <li>uuid -- create unique id</li>
+  <li>react-icons - use icons of FontAwesome</li>
+  <li>leaflet, react-leaflet -- Map, Geolocation (leaflet@3.1.0, react-leaflet/core@1.0.2)<br>
+    Geolocation -- The listings use Google geocoding to get the coords from the address field.
+  </li>
+  <li>swiper - slider images (swiper@6.8.1)</li>
+</ul>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#### Deploying:
+<h5>set Environment Variables:</h5>
+  - Google Geocode API key (REACT_APP_GEOCODE_API_KEY)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
