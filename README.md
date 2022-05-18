@@ -8,7 +8,8 @@ using stack of technologies:  React + Firebase;
 
 Design: mobile-first
 
-Database + Authontification + File storage: Firebase
+Database + Authontification + File storage: Firebase<br>
+![DB Schema](https://github.com/Lerik13/house-marketplace/blob/master/schema_firebase_db.jpg?raw=true "DB Schema")
 
 ### Client Functionality:
 1. Register User (/sign-up)
